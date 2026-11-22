@@ -1,6 +1,6 @@
-// Story missions for Brisa Sound: 7 jobs from fixer Tía Rosa, in order.
-// Each mission has an objective marker, a timer where it matters, dialogue,
-// and a cash + respect payout. Completing all 7 finishes the story arc.
+// BRISA SOUND — missions.js: story jobs from fixer Tía Rosa, in order.
+// 7 missions, each with an objective marker, a timer where it matters,
+// dialogue, and a cash + respect payout. Completing all 7 finishes the story.
 import { dist2D } from './random.js';
 
 export const CREW = [

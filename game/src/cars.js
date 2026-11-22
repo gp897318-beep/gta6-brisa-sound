@@ -1,5 +1,6 @@
-// Vehicles for Brisa Sound: player car physics, NPC traffic, police cruisers.
-// All cars are low-poly boxes + cylinders; physics is arcade (accel/brake/steer).
+// BRISA SOUND — cars.js: player car physics, NPC traffic, police cruisers.
+// Vehicles for Brisa Sound: all cars are low-poly boxes + cylinders; physics
+// is arcade (accel/brake/steer).
 import '../vendor/three.min.js';
 const THREE = window.THREE;
 import { mulberry32, pick, range, clamp, angleLerp } from './random.js';

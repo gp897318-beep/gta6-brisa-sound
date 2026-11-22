@@ -1,6 +1,7 @@
-// Brisa Sound — the city. Dusk-purple coastal city: downtown towers, neon signs,
-// palm-lined avenues, a beach and ocean on the east, a marina, and the
-// elevated Coral Span bridge crossing the harbor channel. All low-poly Three.js.
+// BRISA SOUND — city.js: builds the whole city — roads, districts, buildings.
+// Dusk-purple coastal city: downtown towers, neon signs, palm-lined avenues,
+// a beach and ocean on the east, a marina, and the elevated Coral Span bridge
+// crossing the harbor channel. All low-poly Three.js.
 import '../vendor/three.min.js';
 const THREE = window.THREE;
 import { mulberry32, pick, range, intRange } from './random.js';

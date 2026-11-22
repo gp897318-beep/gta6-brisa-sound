@@ -1,5 +1,6 @@
-// Pedestrians for Brisa Sound: sidewalk walkers who stroll, chat, and flee
-// when a car speeds at them or a shot rings out.
+// BRISA SOUND — peds.js: pedestrians on the sidewalks of the city.
+// Sidewalk walkers who stroll, chat, and flee when a car speeds at them
+// or a shot rings out.
 import '../vendor/three.min.js';
 const THREE = window.THREE;
 import { mulberry32, pick, range, clamp } from './random.js';

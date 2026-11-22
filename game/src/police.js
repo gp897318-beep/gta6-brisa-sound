@@ -1,4 +1,4 @@
-// Wanted level + Brisa PD pursuit AI + police helicopter.
+// BRISA SOUND — police.js: wanted level, Brisa PD pursuit AI, helicopter.
 // Wanted 1-5 stars: more stars = more units, faster cruisers, heli + spotlight.
 // Units have named callsigns, live distances and tactics (PURSUE / RAMMING /
 // FLANKING / ROADBLOCK / PIT / CLOSING IN) shown in the dispatch panel.

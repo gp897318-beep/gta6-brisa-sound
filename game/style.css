@@ -1,5 +1,5 @@
-/* Brisa Sound — HUD + menu styling. Neon dusk theme: purple glass panels,
-   gold accents, pink neon. All DOM, so it stays crisp in screenshots. */
+/* BRISA SOUND — style.css: HUD + menu styling for the whole game. */
+/* Neon dusk theme: purple glass panels, gold accents, pink neon. All DOM, so it stays crisp in screenshots. */
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; overflow: hidden; background: #171226; font-family: 'Segoe UI', Arial, sans-serif; }
 #app, #app canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }

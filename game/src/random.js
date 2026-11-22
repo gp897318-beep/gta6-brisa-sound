@@ -1,4 +1,4 @@
-// Seeded random helpers for Brisa Sound: deterministic city layout and traffic.
+// BRISA SOUND — random.js: seeded random helpers, deterministic city + traffic.
 // Every value derives from a single integer seed so ?seed=N replays the same city.
 export function mulberry32(seed) {
   let a = seed >>> 0;

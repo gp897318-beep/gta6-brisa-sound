@@ -1,7 +1,7 @@
-// HUD for Brisa Sound: every panel is a DOM overlay above the 3D canvas so it
-// stays crisp in screenshots — mission panel, clock/money/wanted, police
-// dispatch, weapon slots, minimap, health/armor, speed, dialogue, radio,
-// crew abilities and the current street/district.
+// BRISA SOUND — hud.js: every HUD panel, as DOM overlays above the 3D canvas.
+// Mission panel, clock/money/wanted, police dispatch, weapon slots, minimap,
+// health/armor, speed, dialogue, radio, crew abilities and the current
+// street/district — all DOM so they stay crisp in screenshots.
 import { ROADS_X, ROADS_Z, districtAt, streetName } from './city.js';
 
 const WEAPONS = [

@@ -1,5 +1,6 @@
-// Keyboard + mouse input for Brisa Sound. Tracks held keys, edge presses, and
-// pointer state so driving, walking, combat and menus all read from one place.
+// BRISA SOUND — input.js: keyboard + mouse, one place for all controls.
+// Tracks held keys, edge presses, and pointer state so driving, walking,
+// combat and menus all read from one place.
 export class Input {
   constructor() {
     this.keys = new Set();

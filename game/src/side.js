@@ -1,4 +1,4 @@
-// Side activities for Brisa Sound — all playable, all paying:
+// BRISA SOUND — side.js: side activities — all playable, all paying.
 // TAXI (pick up fares and drop them off), STREET RACE (timed checkpoint
 // sprint with a saved best time), COURIER (5 parcel pickups), and NEON ORBS
 // (8 glowing collectibles hidden around the city). Each is a small state

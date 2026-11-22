@@ -1,6 +1,6 @@
-// Screenshot staging for Brisa Sound: ?shot=cover|drive|mission|menu with
-// &seed=N places the player, cars, police and helicopter in a composed scene,
-// then paints twice and sets window.__shotReady for the screenshot runner.
+// BRISA SOUND — shots.js: screenshot staging (?shot=cover|drive|mission|menu).
+// With &seed=N places the player, cars, police and helicopter in a composed
+// scene, then paints twice and sets window.__shotReady for the runner.
 import { CAR_MODELS } from './cars.js';
 
 export function stageShot(game, mode) {

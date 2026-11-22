@@ -1,5 +1,6 @@
-// WebAudio synth for Brisa Sound: engine hum, police siren, gunshots, radio
-// music, UI blips. Everything is synthesized — no audio files, no network.
+// BRISA SOUND — audio.js: all game sound, synthesized with WebAudio.
+// Engine hum, police siren, gunshots, radio music, UI blips. Everything is
+// synthesized — no audio files, no network.
 export class AudioEngine {
   constructor() {
     this.ctx = null;

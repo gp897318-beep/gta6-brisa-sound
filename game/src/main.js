@@ -1,6 +1,7 @@
-// Brisa Sound — boot, game loop, player, camera, combat, save.
+// BRISA SOUND — main.js: boot, game loop, player, camera, combat, save.
 // A 3D third-person open-world crime game: on foot and by car, traffic,
 // pedestrians, police wanted levels, 7 story missions, HUD + minimap.
+// Entry point — wires city, cars, police, peds, missions, side jobs and HUD.
 import '../vendor/three.min.js';
 const THREE = window.THREE;
 import { mulberry32, hashSeed, clamp, dist2D, angleLerp } from './random.js';
