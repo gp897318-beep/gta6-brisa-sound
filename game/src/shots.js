@@ -1,79 +1,86 @@
-// The screenshot scenes behind ?shot=start|play|end. Each one plays the real rules forward from a
-// fresh world for a fixed number of steps, steered by a simple autopilot (look ahead each way the
-// paddle could move, keep clear of blocks, chase the lowest coin when that is safe), so the frame
-// is what a short game really looks like and the same seed always gives the same frame.
-import { FIELD, PLAYER, STEP } from './config.js';
-import { EVENT_OVER, KIND_BLOCK } from './world.js';
-import { SCREEN_OVER, SCREEN_PLAY, SCREEN_TITLE } from './render.js';
+// Screenshot staging for Brisa Sound: ?shot=cover|drive|mission|menu with
+// &seed=N places the player, cars, police and helicopter in a composed scene,
+// then paints twice and sets window.__shotReady for the screenshot runner.
+import { CAR_MODELS } from './cars.js';
 
-const START_SECONDS = 5;
-const PLAY_SECONDS = 26;
-const END_LIMIT_SECONDS = 600;
-/**
- * How far ahead, in seconds, the autopilot checks each way it could move: the play scene's pilot
- * looks well ahead and keeps all its lives; the end scene's looks only a moment ahead, so it is
- * caught out once the blocks speed up, as a hurried player is.
- */
-const HORIZON_PLAY = 0.7;
-const HORIZON_END = 0.25;
-const SAMPLE = 1 / 30;
-const DIRECTIONS = [0, -1, 1];
-/** Extra room, each side, it keeps between the paddle and a block. */
-const MARGIN = 10;
-
-/** Seconds until moving in `direction` (-1, 0, 1) runs the paddle into a block; Infinity when it never does. */
-function timeToHit(state, direction, horizon) {
-  const player = state.player;
-  for (let t = SAMPLE; t <= horizon; t += SAMPLE) {
-    const x = Math.min(FIELD.width - player.width, Math.max(0, player.x + direction * PLAYER.speed * t));
-    for (let index = 0; index < state.items.length; index += 1) {
-      const item = state.items[index];
-      if (!item.active || item.kind !== KIND_BLOCK) continue;
-      const y = item.y + item.speed * t;
-      if (y + item.height > player.y && y < player.y + player.height && item.x < x + player.width + MARGIN && item.x + item.width > x - MARGIN) return t;
-    }
+export function stageShot(game, mode) {
+  const g = game;
+  g.hideMenu();
+  g.state.playing = true;
+  g.audio.ensure();
+  if (mode === 'menu') {
+    g.showMenu();
+    g.state.playing = false;
+    g.placeCameraForMenu();
+    return;
   }
-  return Infinity;
+  if (mode === 'cover') {
+    // FIVE-STAR CHAOS on the Coral Span approach: player in the Calyx Sprint
+    // GT at speed, a burning wreck with explosion glow ahead, roadblock
+    // cruisers + SWAT closing in, heli ahead overhead with the spotlight on.
+    g.spawnPlayerCarAt(108, 0, Math.PI / 2, CAR_MODELS[0]);
+    g.playerCar.speed = 24;
+    g.spawnBurningWreck(121, 4, CAR_MODELS[5]);
+    g.police.addHeat(95, g.state.time);
+    g.police.syncUnits({ x: 108, z: 0 });
+    g.police.spotAngle = 0; // heli ahead, in frame
+    const spots = [
+      { x: 126, z: -4, heading: -Math.PI / 2, tactic: 'ROADBLOCK' },
+      { x: 130, z: 5, heading: -Math.PI / 2, tactic: 'RAMMING' },
+      { x: 92, z: 7, heading: Math.PI / 2, tactic: 'FLANKING' },
+      { x: 96, z: -6, heading: Math.PI / 2, tactic: 'PURSUE' },
+      { x: 116, z: -7, heading: Math.PI / 2, tactic: 'PIT' },
+      { x: 114, z: 7, heading: Math.PI / 2, tactic: 'CLOSING IN' },
+    ];
+    g.police.units.forEach((u, i) => {
+      const s = spots[i % spots.length];
+      u.x = s.x; u.z = s.z; u.heading = s.heading; u.tactic = s.tactic;
+      u.dist = Math.round(Math.hypot(s.x - 108, s.z));
+    });
+    // Place cruiser meshes + heli once (staged frames freeze police motion).
+    g.police.update(0.001, { x: 108, z: 0 }, 0, g.city, g.state.time, null);
+    g.state.wantedOverride = 5;
+    g.state.mission = g.missions.mission;
+    g.hud.showDialog('TÍA ROSA', 'FIXER — ROSA’S DINER', 'They’re all over you, mijo! Punch it over the Span — don’t stop for anyone!');
+    g.placeCameraForChase();
+    return;
+  }
+  if (mode === 'drive') {
+    // Golden dusk cruise down Palm Row with traffic and a 1-star tail:
+    // one cruiser ahead facing the player, one alongside.
+    g.spawnPlayerCarAt(-40, 150, 0, CAR_MODELS[4]);
+    g.playerCar.speed = 26;
+    g.police.addHeat(18, g.state.time);
+    g.police.syncUnits({ x: -40, z: 150 });
+    g.police.units.forEach((u, i) => {
+      const spots = [
+        { x: -40, z: 178, heading: Math.PI, tactic: 'ROADBLOCK' },
+        { x: -31, z: 166, heading: 0, tactic: 'PURSUE' },
+      ];
+      const s = spots[i % spots.length];
+      u.x = s.x; u.z = s.z; u.heading = s.heading; u.tactic = s.tactic;
+      u.dist = Math.round(Math.hypot(s.x + 40, s.z - 150));
+    });
+    g.police.update(0.001, { x: -40, z: 150 }, 0, g.city, g.state.time, null);
+    g.hud.showDialog('MILO “SPARROW” VANE', 'DRIVER — CREW', 'Easy on the throttle through Palm Row. The whole city is watching the sunset — and us.');
+    g.placeCameraForChase();
+    return;
+  }
+  if (mode === 'mission') {
+    // On foot on Neon Mile, facing east down the road toward the diner
+    // intersection — gold beacon ahead, fixer dialogue up.
+    g.spawnPlayerOnFoot(36, -120, Math.PI / 2);
+    g.missions.startMission(0);
+    g.hud.showDialog('TÍA ROSA', 'FIXER — ROSA’S DINER, NEON MILE', 'Mijo, the city eats the slow. Take the Calyx, bring my package back in one piece.');
+    g.placeCameraForFoot();
+    return;
+  }
+  // Default: cover.
+  stageShot(game, 'cover');
 }
 
-/** Of the safe ways to move, the one toward the lowest coin (or the centre); else the one that is hit last. */
-function autopilot(state, horizon) {
-  const player = state.player;
-  let coin = null;
-  for (let index = 0; index < state.items.length; index += 1) {
-    const item = state.items[index];
-    if (item.active && item.kind !== KIND_BLOCK && (coin === null || item.y > coin.y)) coin = item;
-  }
-  const target = coin === null ? FIELD.width / 2 : coin.x + coin.width / 2;
-  const centre = player.x + player.width / 2;
-  const wanted = target > centre + 8 ? 1 : target < centre - 8 ? -1 : 0;
-  let best = wanted;
-  let bestTime = timeToHit(state, wanted, horizon);
-  for (let index = 0; index < DIRECTIONS.length && bestTime !== Infinity; index += 1) {
-    const time = timeToHit(state, DIRECTIONS[index], horizon);
-    if (time > bestTime) {
-      bestTime = time;
-      best = DIRECTIONS[index];
-    }
-  }
-  return best;
-}
-
-/**
- * Set `world` to the named scene (start, play or end; any other name is start) and return the
- * screen to draw over it and the best score to show.
- */
-export function stageShot(name, world) {
-  world.reset();
-  if (name !== 'play' && name !== 'end') {
-    for (let index = 0; index < START_SECONDS / STEP; index += 1) world.step(STEP, 0, true);
-    return { screen: SCREEN_TITLE, best: 0 };
-  }
-  const limit = name === 'end' ? END_LIMIT_SECONDS : PLAY_SECONDS;
-  const horizon = name === 'end' ? HORIZON_END : HORIZON_PLAY;
-  for (let index = 0; index < limit / STEP; index += 1) {
-    if (world.step(STEP, autopilot(world.state, horizon), false) & EVENT_OVER) break;
-  }
-  const over = world.state.lives === 0;
-  return { screen: over ? SCREEN_OVER : SCREEN_PLAY, best: world.state.score };
+export function paintShot(game) {
+  game.renderFrame();
+  game.renderFrame();
+  window.__shotReady = true;
 }
